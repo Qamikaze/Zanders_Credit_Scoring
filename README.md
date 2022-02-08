@@ -1,2 +1,2 @@
 # Zanders_Credit_Scoring
-Contains all code for the models and data preprocessing
+This repository contains all the code for the models and data preprocessing used be Team Zanders-B.
