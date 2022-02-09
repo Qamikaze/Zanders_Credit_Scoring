@@ -160,7 +160,7 @@ weight = y_train*len(y_test)/sum(y_test)/2
 weight = weight.values
 weight[np.where(weight == 0)[0]] = 1
 
-model = lgb.LGBMClassifier(boosting_type = 'goss', n_estimators=1, class_weight ='balanced')
+model = lgb.LGBMClassifier(boosting_type = 'goss', n_estimators=500, class_weight ='balanced')
 model.fit(X_train, y_train)
 
 # Get test performance
