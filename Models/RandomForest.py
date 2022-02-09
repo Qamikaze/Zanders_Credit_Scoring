@@ -10,7 +10,7 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import PredefinedSplit
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-import shap
+
 
 start_time = datetime.now()
 
@@ -208,6 +208,9 @@ pred_values = best_random.predict(X_test)
 prob_values = best_random.predict_proba(X_test)[:, 1]
 get_performance(y_test, pred_values, prob_values)
 
+print('Duration: {}'.format(datetime.now() - start_time))
+
+
 import pickle
 # Save model to file
 pkl_filename = "rf.pkl"
@@ -217,20 +220,4 @@ with open(pkl_filename, 'wb') as file:
 # Load model from file
 with open(pkl_filename, 'rb') as file:
     pickle_model = pickle.load(file)
-
-#  Get feature importances
-importances = best_random.feature_importances_
-std = np.std([tree.feature_importances_ for tree in best_random.estimators_], axis=0)
-forest_importances = pd.Series(importances, index=X_train.columns)
-# forest_importances.to_csv('tuned_FI.csv')
-
-ordered = forest_importances.sort_values(ascending=False)
-print(ordered.head(12))
-fig, ax = plt.subplots()
-forest_importances.plot.bar(yerr=std, ax=ax)
-ax.set_title("Feature importances using MDI")
-ax.set_ylabel("Mean decrease in impurity")
-fig.tight_layout()
-
-print('Duration: {}'.format(datetime.now() - start_time))
 
