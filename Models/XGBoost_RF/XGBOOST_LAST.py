@@ -316,8 +316,8 @@ class XGBBase(XGBModel):
         X_original = X
          
         X_normed = Normalizer().fit_transform(X)
-        y_pred = np.full((len(y),),0.005)
-        for i in range(begin_at_stage, 101):    
+        # y_pred = np.full((len(y),),0.005)
+        for i in range(begin_at_stage, 31):    
 
             print('training estimator #' + str(i))
                          
@@ -336,16 +336,18 @@ class XGBBase(XGBModel):
             X = get_transformed_matrix(X_normed, self.augmentations_[i], augmentation_method=self.augmentation_method)
             
             if(i==0):
-                self.classifier.fit(np.concatenate([X_original, X], axis=1), y, sample_weight)
+                xgbmodel = self.classifier.fit(np.concatenate([X_original, X], axis=1), y,)#sample_weight)
 
-            dmatrix = xgb.DMatrix(np.concatenate([X_original, X], axis=1), label=y)
-
-            #self.classifier.get_booster().update(dmatrix, i)
+            dmatrix = xgb.DMatrix(np.concatenate([X_original, X], axis=1), label=y, weight = sample_weight)
+            #xgbmodel = self.classifier.fit(np.concatenate([X_original, X], axis=1), y, sample_weight,)#xgb_model=xgbmodel)
+            self.classifier.get_booster().update(dmatrix, i)
             y_pred = self.classifier.get_booster().predict(dmatrix)               
-            G = self.gradient(y_pred, y)
-            H = self.hessian(y_pred, y)
-            self.classifier.get_booster().boost(dmatrix, G, H)      
-            y_pred = self.classifier.get_booster().predict(dmatrix) 
+            # G = self.gradient(y_pred, y)
+            # H = self.hessian(y_pred, y)
+            # self.classifier.get_booster().boost(dmatrix, G, H)      
+            # y_pred = self.classifier.get_booster().predict(dmatrix) 
+            #y_pred = self.classifier.predict(np.concatenate([X_original, X], axis=1))
+            
 
         return i + 1
 
@@ -644,11 +646,11 @@ class XGBModelClassifier(XGBBase):
 
     def predict(self, X): 
         X_normed = Normalizer().fit_transform(X)
-        X_aug = get_transformed_matrix(X_normed, self.augmentations_[100], augmentation_method=self.augmentation_method)
+        X_aug = get_transformed_matrix(X_normed, self.augmentations_[30], augmentation_method=self.augmentation_method)
         return self.classifier.predict(np.concatenate([X, X_aug], axis=1))
     
     # predict proba 
     def predict_proba(self, X): 
         X_normed = Normalizer().fit_transform(X)
-        X_aug = get_transformed_matrix(X_normed, self.augmentations_[100], augmentation_method=self.augmentation_method)
+        X_aug = get_transformed_matrix(X_normed, self.augmentations_[30], augmentation_method=self.augmentation_method)
         return self.classifier.predict_proba(np.concatenate([X, X_aug], axis=1))

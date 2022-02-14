@@ -140,7 +140,7 @@ def get_data(small):
     
     return X_train[c], y_train, X_test[c], y_test
 
-X_train, y_train, X_test, y_test = get_data(True)
+X_train, y_train, X_test, y_test = get_data(False)
 
 # Use balanced weights
 weight = y_train*len(y_test)/sum(y_test)/2
