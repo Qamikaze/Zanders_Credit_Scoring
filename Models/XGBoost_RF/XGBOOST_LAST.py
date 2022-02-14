@@ -643,7 +643,7 @@ class XGBModelClassifier(XGBBase):
 
 
     def fit(self, X, y, sample_weight=None): 
-        super(XGBModelClassifier,self).fit(X, y, sample_weight=sample_weight) 
+        super(XGBModelClassifier,self).fit(X, y,)# sample_weight=sample_weight) 
 
     def predict(self, X): 
         X_normed = Normalizer().fit_transform(X)
