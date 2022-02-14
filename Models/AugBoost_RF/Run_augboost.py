@@ -1,13 +1,3 @@
-
-"""
-Wie runt wat?
-
-Noor: niets aanpassen :)
-Tessa: zet n_estimators in regel 164 op 60
-Sven: haal /2 weg uit regel 154 
-    
-"""
-
 import pandas as pd
 import numpy as np
 from datetime import datetime
