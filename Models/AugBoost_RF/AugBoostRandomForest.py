@@ -27,7 +27,7 @@ import pickle
 import datetime
 import matplotlib.pyplot as plt
 
-from AugmentationUtilsNN import get_transformed_matrix, get_transformed_params
+from AugmentationUtils import get_transformed_matrix, get_transformed_params
 
 
 class AugBoostBase(BaseGradientBoosting):
