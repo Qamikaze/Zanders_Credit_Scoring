@@ -176,4 +176,3 @@ prob_values = model.predict_proba(X_test)[:, 1]
 get_performance(y_test, pred_values, prob_values)
 
 print('Total time: {}'.format(datetime.now() - start_time))
-
