@@ -140,7 +140,7 @@ def get_data(small):
     
     return X_train[c], y_train, X_test[c], y_test
 
-X_train, y_train, X_test, y_test = get_data(False)
+X_train, y_train, X_test, y_test = get_data(True)
 
 # Use balanced weights
 weight = y_train*len(y_test)/sum(y_test)/2
@@ -161,7 +161,7 @@ X_train = X_train.values
 X_test = X_test.values
 #%%
 from XGBOOST_LAST import XGBModelClassifier as XGB
-model = XGB(n_estimators=1, #number_of_training_rounds = 31, #learning_rate=0.1, \
+model = XGB(n_estimators=1, number_of_training_rounds = 31, #learning_rate=0.1, \
     n_features_per_subset=3, trees_between_feature_update=10,\
     augmentation_method='rf', save_mid_experiment_accuracy_results=False,)#loss='exponential')
 

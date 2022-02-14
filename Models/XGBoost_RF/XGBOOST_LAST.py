@@ -59,7 +59,7 @@ class XGBBase(XGBModel):
                  n_jobs, nthread, gamma, min_child_weight, max_delta_step,
                  subsample, colsample_bytree, colsample_bylevel, reg_alpha,
                  reg_lambda, scale_pos_weight, base_score, random_state,
-                 seed, missing,
+                 seed, missing, number_of_training_rounds,
                  # dit van XGBoost + toegevoegde voor RF?
                  loss, criterion,
                  min_samples_split, min_samples_leaf, min_weight_fraction_leaf,
@@ -96,6 +96,7 @@ class XGBBase(XGBModel):
         self.loss = loss
         self.estimators_ = np.empty((0, 0), dtype=np.object)
         self.i = 0
+        self.number_of_training_rounds = number_of_training_rounds
         
         # dit toegevoegd voor initializen maar vaag of het nodig is
         self.train_score_ = np.zeros((self.n_estimators,), dtype=np.float64)
@@ -317,7 +318,7 @@ class XGBBase(XGBModel):
          
         X_normed = Normalizer().fit_transform(X)
         # y_pred = np.full((len(y),),0.005)
-        for i in range(begin_at_stage, 31):    
+        for i in range(begin_at_stage, self.number_of_training_rounds):    
 
             print('training estimator #' + str(i))
                          
@@ -584,7 +585,7 @@ class XGBModelClassifier(XGBBase):
                  max_delta_step=0, colsample_bytree=1,
                  colsample_bylevel=1, reg_alpha=0,
                  reg_lambda=1, scale_pos_weight=1, base_score=0.5,
-                 random_state=0, learning_rate=0.1, n_estimators=100, #number_of_training_rounds=100,
+                 random_state=0, learning_rate=0.1, n_estimators=100, number_of_training_rounds=100,
                  # hier de inputs voor Classifier, nv zelfde als base
                  # stond er al, hieronder zijn inputs voor RF en oude van augboost die wss overbodig zijn
                  loss='deviance',
@@ -625,7 +626,7 @@ class XGBModelClassifier(XGBBase):
                   'validation_fraction': validation_fraction,
                   'experiment_name': experiment_name,
                   'save_mid_experiment_accuracy_results': save_mid_experiment_accuracy_results, 'tol': tol,
-                  'is_classification': True,}#'number_of_training_rounds':number_of_training_rounds}
+                  'is_classification': True,'number_of_training_rounds':number_of_training_rounds}
 
         # nog niet helemaal zeker welke dit moeten zijn: kunnen veel meer maar geen zin
         params_xgb = {'learning_rate': learning_rate, 'n_estimators': n_estimators, 
@@ -646,11 +647,11 @@ class XGBModelClassifier(XGBBase):
 
     def predict(self, X): 
         X_normed = Normalizer().fit_transform(X)
-        X_aug = get_transformed_matrix(X_normed, self.augmentations_[30], augmentation_method=self.augmentation_method)
+        X_aug = get_transformed_matrix(X_normed, self.augmentations_[self.number_of_training_rounds-1], augmentation_method=self.augmentation_method)
         return self.classifier.predict(np.concatenate([X, X_aug], axis=1))
     
     # predict proba 
     def predict_proba(self, X): 
         X_normed = Normalizer().fit_transform(X)
-        X_aug = get_transformed_matrix(X_normed, self.augmentations_[30], augmentation_method=self.augmentation_method)
+        X_aug = get_transformed_matrix(X_normed, self.augmentations_[self.number_of_training_rounds-1], augmentation_method=self.augmentation_method)
         return self.classifier.predict_proba(np.concatenate([X, X_aug], axis=1))
