@@ -188,11 +188,26 @@ print('Model Duration: {}'.format(datetime.now() - start_time))
 
 # check performance with DT
 from sklearn.tree import DecisionTreeRegressor
-reg = DecisionTreeRegressor().fit(X_test, prob_values)
-y_pred = reg.predict(np.array(X_test))
+p_values = model.predict_proba(X_train)[:, 1]
+reg = DecisionTreeRegressor().fit(X_train, p_values)
+y_pred = reg.predict(np.array(X_train))
 
 from sklearn.metrics import r2_score
-r2_score(prob_values, y_pred)
+r = r2_score(p_values, y_pred)
+print(r)
+reg.get_depth()
+
+# get importance
+importance = reg.feature_importances_
+
+ordered_importances = pd.DataFrame()
+ordered_importances['feature'] = X_train.columns
+ordered_importances['importance'] = importance 
+ordered_importances = ordered_importances.sort_values(ascending=False, by=['importance'])
+
+n =10
+some = ordered_importances.head(n)
+sum(ordered_importances['importance'].head(n))
 
 
 
