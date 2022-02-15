@@ -9,6 +9,7 @@ from statsmodels.stats.contingency_tables import mcnemar
 import numpy as np
 pred_values_model1 = pred_values #Load in the predicted values (binary) for model 1
 pred_values_model2 = pred_values_2 #Load in the predicted values (binary) for model 2
+y_test = y_test #Load in the y_test model
 model1_correctness = (pred_values_model1==y_test)
 model2_correctness = (pred_values_model2==y_test)
 
