@@ -14,16 +14,17 @@ model2_correctness = (pred_values_model2==y_test)
 
 contingency_table = np.zeros((2,2))
 for i in range(0,len(pred_values_model1)):
-    if model1_correctness[i]==True and model2_correctness[i]==True:
-        contingency_table[0,0] += 1
-    elif model1_correctness[i]==False and model2_correctness[i]==False:
-        contingency_table[1,1] += 1
-    elif model1_correctness[i]==True and model2_correctness[i]==False:
-        contingency_table[0,1] += 1
-    elif model1_correctness[i]==False and model2_correctness[i]==True:
-        contingency_table[1,0] += 1
+	#if y_test[i]==1: #Dit begin uncomment als we willen testen op alleen de default cases
+	    if model1_correctness[i]==True and model2_correctness[i]==True:
+		contingency_table[0,0] += 1
+	    elif model1_correctness[i]==False and model2_correctness[i]==False:
+		contingency_table[1,1] += 1
+	    elif model1_correctness[i]==True and model2_correctness[i]==False:
+		contingency_table[0,1] += 1
+	    elif model1_correctness[i]==False and model2_correctness[i]==True:
+		contingency_table[1,0] += 1
         
-result = mcnemar(contingency_table, exact=False,correction=True)
+result = mcnemar(contingency_table, exact=False,correction=False)
 # summarize the finding
 print('statistic=%.3f, p-value=%.3f' % (result.statistic, result.pvalue))
 # interpret the p-value
