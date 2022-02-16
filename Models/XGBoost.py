@@ -187,14 +187,13 @@ n_estimators = [int(x) for x in np.arange(100, 600, 100)]
 max_features = ['sqrt']
 max_depth = [int(x) for x in np.arange(1, 111, 5)]
 max_depth.append(None)
-min_samples_leaf = [int(x) for x in np.arange(2, 14, 2)]
-learning_rate = [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.75]
+# min_samples_leaf = [int(x) for x in np.arange(2, 14, 2)]
+learning_rate = [0.01, 0.03,0.1,0.3]
 gamma = [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.75]
-class_weight = ['balanced', 'balanced_subsample']
+class_weight = ['balanced']
 random_grid = {'n_estimators': n_estimators, #deze
                 'max_features': max_features,
                 'max_depth': max_depth, #deze
-                'min_samples_leaf': min_samples_leaf,
                 'class_weight': class_weight,
                 'learning_rate': learning_rate, #deze
                 'gamma': gamma #deze
