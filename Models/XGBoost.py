@@ -183,9 +183,9 @@ weight = weight.values
 weight[np.where(weight == 0)[0]] = 1
 
 #implementing random grid search, following https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
-n_estimators = [int(x) for x in np.arange(100, 600, 100)]
+n_estimators = [300,350,400,450,500,550,600]
 max_features = ['sqrt']
-max_depth = [int(x) for x in np.arange(1, 111, 5)]
+max_depth = [2,3,4,5,6]
 max_depth.append(None)
 # min_samples_leaf = [int(x) for x in np.arange(2, 14, 2)]
 learning_rate = [0.01, 0.03,0.1,0.3]
