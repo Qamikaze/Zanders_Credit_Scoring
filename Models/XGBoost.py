@@ -190,11 +190,10 @@ max_depth.append(None)
 # min_samples_leaf = [int(x) for x in np.arange(2, 14, 2)]
 learning_rate = [0.01, 0.03,0.1,0.3]
 gamma = [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.75]
-class_weight = ['balanced']
+scale_pos_weight = [1,182.6*0.25,182.6*0.5,182.6*0.75,182.6]
 random_grid = {'n_estimators': n_estimators, #deze
-                'max_features': max_features,
                 'max_depth': max_depth, #deze
-                'class_weight': class_weight,
+                'scale_pos_weight': scale_pos_weight,
                 'learning_rate': learning_rate, #deze
                 'gamma': gamma #deze
 }
@@ -230,7 +229,7 @@ n = 10
 some = ordered_importances.head(n)
 print(some)
 # save model
-best_random.save_model("xgboost.json")
+best_random.save_model("Tuned_xgboost.json")
 
 # load model
 # model_xgb_2 = xgb.XGBClassifier()
