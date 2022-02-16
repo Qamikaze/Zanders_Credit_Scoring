@@ -4,7 +4,7 @@ from datetime import datetime
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import brier_score_loss
-#from hmeasure import h_score
+from hmeasure import h_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import PredefinedSplit
@@ -13,31 +13,6 @@ from sklearn.model_selection import train_test_split
 
 start_time = datetime.now()
 
-
-# Not used here, but can be used for other models to get the same split
-def validation_splitter():
-    # Load raw data
-    train = pd.read_csv('train_data.csv.gz', compression='gzip', header=0, sep=',', quotechar='"')
-
-    # Factorize data
-    train['country_code'] = pd.factorize(train['country_code'])[0]
-    train['industry_code'] = pd.factorize(train['industry_code'])[0]
-    train['size_class'] = pd.factorize(train['size_class'])[0]
-    train['status_year'] = pd.factorize(train['status_year'])[0]
-
-    # Seperate labels and covariates
-    X = train.drop(['y'], axis=1)
-    y = train['y']
-
-    X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=15 / 85, random_state=42, stratify=y)
-
-    return X_train, y_train, X_val, y_val
-
-
-# =============================================================================
-# Performance metrics
-# =============================================================================
 
 def partial_gini(y, p):
     # Select probabilites < 0.4
@@ -65,7 +40,7 @@ def get_performance(y, y_f, p):
     print('PG is ', partial_gini(y, p))
     print('BS is ', brier_score_loss(y, p))
     print('AUC is ', roc_auc_score(y, p))
-    #print('H-measure is ', h_score(y.values, p))
+    print('H-measure is ', h_score(y.values, p))
     print(confusion_matrix(y, y_f))
 
 
@@ -175,7 +150,7 @@ print('Data loading Duration: {}'.format(datetime.now() - start_time))
 # =============================================================================
 # Random Forest
 # =============================================================================
-
+start_time = datetime.now()
 #implementing random grid search, following https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
 n_estimators = [int(x) for x in np.arange(400, 650, 50)]
 max_features = ['sqrt']
@@ -200,25 +175,35 @@ rf_random.fit(X_train, y_train)
 best_random = rf_random.best_estimator_
 print(best_random)
 
-#best_random = RandomForestClassifier(class_weight='balanced', max_depth=110,
-#                                     max_features='sqrt', min_samples_leaf=14,
-#                                     n_estimators=500, random_state=1, n_jobs=-1, verbose=2)
-best_random.fit(X_train, y_train)
 # Get test performance
 pred_values = best_random.predict(X_test)
 prob_values = best_random.predict_proba(X_test)[:, 1]
 get_performance(y_test, pred_values, prob_values)
 
+p = pd.DataFrame()
+p['pred_rf']=pred_values
+p.to_csv('pred_rf.csv', index=False)
 print('Duration: {}'.format(datetime.now() - start_time))
 
 import pickle
 
 # Save model to file
-pkl_filename = "rf.pkl"
-with open(pkl_filename, 'wb') as file:
-    pickle.dump(best_random, file)
+pkl_filename = "TUNED_rf.pkl"
+# with open(pkl_filename, 'wb') as file:
+#     pickle.dump(best_random, file)
 
 # Load model from file
 with open(pkl_filename, 'rb') as file:
     pickle_model = pickle.load(file)
+    
+    
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
