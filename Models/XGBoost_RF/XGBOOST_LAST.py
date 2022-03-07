@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 import xgboost as xgb
 import scipy.special as ss
 
-from AugmentationUtilsNN import get_transformed_matrix, get_transformed_params
+from AugmentationUtils import get_transformed_matrix, get_transformed_params
 
 # deze nodig voor fit stages
 from sklearn.tree import DecisionTreeRegressor
