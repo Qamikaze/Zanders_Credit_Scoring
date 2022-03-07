@@ -1,3 +1,7 @@
+#####
+# This code provides output for the AugBoost-RF model. It imports the function AugBoostClassifier from AugBoostNN.py
+#####
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -53,8 +57,8 @@ def get_performance(y, y_f, p):
 # =============================================================================
 
 def get_data(small):
-    train = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
-    test = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
+    train = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')#load data
+    test = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')#load data
     
     if small == True:
         n = 10000
@@ -141,7 +145,7 @@ def get_data(small):
     return X_train[c], y_train, X_test[c], y_test
 
 X_train, y_train, X_test, y_test = get_data(False)
-#%%
+
 # Use balanced weights
 weight = y_train*len(y_test)/sum(y_test)/2
 weight[np.where(weight == 0)[0]] = 1
