@@ -6,6 +6,7 @@ Data Prepocessing: this section contains all the files used for prepocessing the
 Interpret: this section contains the file which uses model-agnostic methods to interpret the data.
 
 McNemar: this section contains the file which uses McNemar's tests to compare the output among models.
+ This file is used to perform the McNemar's test to compare the performance of different classification models.
 
 Models: this section contains all the used models.
  
