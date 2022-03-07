@@ -1,5 +1,5 @@
 #####
-# This code augments the features for the AugBoostRF. Therfore, it is imported by XGBOOST_LAST.py
+# This code augments the features for the XGBoost-RF. Therfore, it is imported by XGBOOST_LAST.py
 ####
 from sklearn.utils import gen_batches, check_random_state
 
@@ -22,6 +22,7 @@ def random_feature_subsets(array, batch_size, random_state):
 def augment(X, augmentation_matrix):
     return np.dot(X, augmentation_matrix)
 
+#Function used to transform the parameters
 def get_transformed_params(X, y, n_features_per_subset, max_epochs, random_state=777, augmentation_method='nn'):
     print(X.shape)
     print(y.shape)
@@ -47,7 +48,7 @@ def get_transformed_params(X, y, n_features_per_subset, max_epochs, random_state
                     raise ValueError("`augmentation_method` must be `pca`, 'rp','rf' or `nn`, but was %s" % augmentation_method)
     return transforming_params
 
-
+# Function used to transform the X matrix of the problem at hand
 def get_transformed_matrix(X, transforming_params, augmentation_method):
     transformed_matrix = np.zeros(X.shape, dtype=np.float32)
     for tup in transforming_params:
