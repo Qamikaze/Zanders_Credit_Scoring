@@ -2,11 +2,14 @@
 This repository contains all the code for the models and data preprocessing used by Team Zanders-B. It consists of the following sections:
 
 - **Data Prepocessing**: this section contains all the files used for prepocessing the data.
+  - **GetFeatures.py**: This file performs a variable selection by removing highly correlated features.
+  - **KNN_imputer.py**: This file imputes missing values by using a KNN-estimator.
 
 - **Interpret**: this section contains the file which uses model-agnostic methods to interpret the data.
+  - **ALE_LIME.py**: This file implements ALE for global model-agnostic interpretation and LIME for local model-agnostic explanation.
 
 - **McNemar**: this section contains the file which uses McNemar's tests to compare the output among models.
- This file is used to perform the McNemar's test to compare the performance of different classification models.
+  - **McNemar.py**: This file is used to perform the McNemar's test to compare the performance of different classification models.
 
 - **Models**: this section contains all the used models.
   - **AugBoost_RF**: this section contains the files for the AugBoost-RF model.
