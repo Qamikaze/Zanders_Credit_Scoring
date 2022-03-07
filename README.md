@@ -9,4 +9,7 @@ McNemar: this section contains the file which uses McNemar's tests to compare th
  This file is used to perform the McNemar's test to compare the performance of different classification models.
 
 Models: this section contains all the used models.
+
+XGBoost-RF: The code for the new XGBoost-RF model
+- AugmentationUtils: 
  
