@@ -1,5 +1,5 @@
 #####
-# This code augments the features for the AugBoostRF. Therfore, it is imported by AugBoostRandomForest.py
+# This code augments the features for the AugBoostRF. Therfore, it is imported by XGBOOST_LAST.py
 ####
 from sklearn.utils import gen_batches, check_random_state
 
