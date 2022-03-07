@@ -1,6 +1,9 @@
-from xgboost import XGBModel, XGBClassifier #XGBoostLabelEncoder # laaste mss niet nodig
+#####
+# This code performs the XGBoost-RF algorithm. It has as a basis the original AugBoostNN function, see https://github.com/augboost-anon/augboost and is adjusted accordingly.
+#####
 
-#from .callback import TrainingCallback
+from xgboost import XGBModel, XGBClassifier
+
 from typing import Sequence
 
 from xgboost.compat import XGBModelBase
@@ -31,12 +34,8 @@ import xgboost as xgb
 import scipy.special as ss
 
 from AugmentationUtils import get_transformed_matrix, get_transformed_params
-
-# deze nodig voor fit stages
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree._tree import TREE_LEAF
-
-# nodig voor decision function
 from sklearn.ensemble._gradient_boosting import predict_stages
 
 _SklObjective = Optional[
@@ -51,16 +50,12 @@ from xgboost.training import train
 
 
 class XGBBase(XGBModel):
-
-    # hier alle variabelen die mogelijk zijn toevoegen, nog bdenken of duplicate arguments andere naam geven, nu gwn verwijdert als dubbel
     def __init__(self, 
-                 # deze van XGB Framework
                  n_estimators, max_depth, learning_rate, silent, objective, booster,
                  n_jobs, nthread, gamma, min_child_weight, max_delta_step,
                  subsample, colsample_bytree, colsample_bylevel, reg_alpha,
                  reg_lambda, scale_pos_weight, base_score, random_state,
                  seed, missing, number_of_training_rounds,
-                 # dit van XGBoost + toegevoegde voor RF?
                  loss, criterion,
                  min_samples_split, min_samples_leaf, min_weight_fraction_leaf,
                  min_impurity_decrease, min_impurity_split,
@@ -70,7 +65,6 @@ class XGBBase(XGBModel):
                  save_mid_experiment_accuracy_results=False, warm_start=False,
                  validation_fraction=0.1, tol=1e-4, max_leaf_nodes=None):
         
-        # hier variablen die in XGBBase voorkomen
         super(XGBBase, self).__init__(n_estimators, max_depth, learning_rate, silent, objective, booster,
                                       n_jobs, nthread, gamma, min_child_weight, max_delta_step,
                                       subsample, colsample_bytree, colsample_bylevel, reg_alpha,
@@ -98,7 +92,6 @@ class XGBBase(XGBModel):
         self.i = 0
         self.number_of_training_rounds = number_of_training_rounds
         
-        # dit toegevoegd voor initializen maar vaag of het nodig is
         self.train_score_ = np.zeros((self.n_estimators,), dtype=np.float64)
         self.augmentations_ = []
         self.normalizer = QuantileTransformer(n_quantiles=1000, random_state=77)
@@ -179,16 +172,8 @@ class XGBBase(XGBModel):
         return self.i > 0      
 
 
-    """
-    def decision_function(self, X):
-        # deze array omzetting bestaat helemaal niet meer, dus probeer het zonder, hopleijk geen transformatie nodig
-        #X = array2d(X, dtype=DTYPE, order="C")
-        score = self._init_decision_function(X) # dit is dus gwn prediction van XGBboost
-        predict_stages(self.estimators_, X, self.learning_rate, score) # geen idee wat hier doel van is/ werkt, maar lijkt ook niet echt iets te doen
-        return score 
-    """
     def fit(self, X, y, X_val=None, y_val=None, sample_weight=None, monitor=None):
-        """Fit the AugBoost model.
+        """Fit the XGBoost model.
             Parameters
             ----------
             X : array-like, shape = [n_samples, n_features]
@@ -224,9 +209,6 @@ class XGBBase(XGBModel):
         self : object
             Returns self.
         """
-
-        # if not warmstart - clear the estimator state
-        self._clear_state()
         
         # Check input
         
@@ -254,7 +236,6 @@ class XGBBase(XGBModel):
 
         else:
             # add more estimators to fitted model
-            # invariant: warm_start = True
             if self.n_estimators < self.estimators_.shape[0]:
                 raise ValueError('n_estimators=%d must be larger or equal to '
                                  'estimators_.shape[0]=%d when '
@@ -271,7 +252,6 @@ class XGBBase(XGBModel):
 
         X_idx_sorted = None
         
-        # deze functie lijkt beschikbaar, want zelf gedefinieerd
         n_stages = self._fit_stages(X, y, y_pred, sample_weight, 77,
                                     X_val, y_val, sample_weight_val,
                                     begin_at_stage, monitor, X_idx_sorted)
@@ -317,7 +297,6 @@ class XGBBase(XGBModel):
         X_original = X
          
         X_normed = Normalizer().fit_transform(X)
-        # y_pred = np.full((len(y),),0.005)
         for i in range(begin_at_stage, self.number_of_training_rounds):    
 
             print('training estimator #' + str(i))
@@ -340,15 +319,8 @@ class XGBBase(XGBModel):
                 xgbmodel = self.classifier.fit(np.concatenate([X_original, X], axis=1), y,)#sample_weight)
 
             dmatrix = xgb.DMatrix(np.concatenate([X_original, X], axis=1), label=y, weight = sample_weight)
-            #xgbmodel = self.classifier.fit(np.concatenate([X_original, X], axis=1), y, sample_weight,)#xgb_model=xgbmodel)
             self.classifier.get_booster().update(dmatrix, i)
-            y_pred = self.classifier.get_booster().predict(dmatrix)               
-            # G = self.gradient(y_pred, y)
-            # H = self.hessian(y_pred, y)
-            # self.classifier.get_booster().boost(dmatrix, G, H)      
-            # y_pred = self.classifier.get_booster().predict(dmatrix) 
-            #y_pred = self.classifier.predict(np.concatenate([X_original, X], axis=1))
-            
+            y_pred = self.classifier.get_booster().predict(dmatrix)                       
 
         return i + 1
 
@@ -385,13 +357,11 @@ class XGBBase(XGBModel):
             y = y.astype(np.float64)
         return y
 
-
     def _validate_X_predict(self, X, check_input):
         if check_input:
             X = self._validate_data(X, dtype=DTYPE, accept_sparse="csr", reset=False)
         return X   
    
-
     def _validate_data(
         self,
         X="no_validation",
@@ -406,8 +376,9 @@ class XGBBase(XGBModel):
         
 
 class XGBModelClassifier(XGBBase):
-    """AugBoost for classification. AugBoost builds an additive model in a forward stage-wise fashion, while augmenting the features in between "boosts" using neural networks, PCA or random projections.
+    """XGBoost-RF for classification. XGBoost builds an additive model in a forward stage-wise fashion, while augmenting the features in between "boosts" using random forests.
        Parameters
+       !NOT ALL THESE PARAMETERS CAN STILL BE USED IN THE CASE OF THE XGBOOST-RF METHOD!
        ----------
        loss : {'deviance', 'exponential'}, optional (default='deviance')
            loss function to be optimized. 'deviance' refers to
@@ -578,16 +549,13 @@ class XGBModelClassifier(XGBBase):
     This began as a fork of their code, and was modified to be an independent repository once we realized that it would be more convenient to use this way. Thanks!***
     """
 
-    def __init__(# hier de inputs voor de base
-                 self, max_depth=3, silent=True, booster='gbtree', nthread=None, gamma=0, subsample=1, seed=None, missing=None,
+    def __init__(self, max_depth=3, silent=True, booster='gbtree', nthread=None, gamma=0, subsample=1, seed=None, missing=None,
                  objective="binary:logistic",
                  min_child_weight=1, n_jobs=1,
                  max_delta_step=0, colsample_bytree=1,
                  colsample_bylevel=1, reg_alpha=0,
                  reg_lambda=1, scale_pos_weight=1, base_score=0.5,
                  random_state=0, learning_rate=0.1, n_estimators=100, number_of_training_rounds=100,
-                 # hier de inputs voor Classifier, nv zelfde als base
-                 # stond er al, hieronder zijn inputs voor RF en oude van augboost die wss overbodig zijn
                  loss='deviance',
                  criterion='friedman_mse', min_samples_split=2,
                  min_samples_leaf=1, min_weight_fraction_leaf=0.,
@@ -608,7 +576,6 @@ class XGBModelClassifier(XGBBase):
                  'reg_lambda': reg_lambda, 'scale_pos_weight': scale_pos_weight, 'base_score': base_score,
                  'random_state': random_state, 'missing': missing, 'objective':objective,
                   'n_jobs':n_jobs, 'max_depth': max_depth,
-                  # overig
                   'loss': loss, 
                   'criterion': criterion, 'min_samples_split': min_samples_split,
                   'min_samples_leaf': min_samples_leaf,
@@ -628,7 +595,6 @@ class XGBModelClassifier(XGBBase):
                   'save_mid_experiment_accuracy_results': save_mid_experiment_accuracy_results, 'tol': tol,
                   'is_classification': True,'number_of_training_rounds':number_of_training_rounds}
 
-        # nog niet helemaal zeker welke dit moeten zijn: kunnen veel meer maar geen zin
         params_xgb = {'learning_rate': learning_rate, 'n_estimators': n_estimators, 
                  'booster': booster,
                  'gamma': gamma, 'min_child_weight': min_child_weight,
