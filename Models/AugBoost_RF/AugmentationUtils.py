@@ -1,5 +1,6 @@
 #####
-# This code augments the features for the AugBoostRF. Therfore, it is imported by AugBoostRandomForest.py
+# This code augments the features for the AugBoostRF. Therfore, it is imported by AugBoostRandomForest.py. 
+# It is an adjusted version of the AugmentationUtils on https://github.com/augboost-anon/augboost/blob/master/AugmentationUtils.py.
 ####
 from sklearn.utils import gen_batches, check_random_state
 
@@ -22,6 +23,7 @@ def random_feature_subsets(array, batch_size, random_state):
 def augment(X, augmentation_matrix):
     return np.dot(X, augmentation_matrix)
 
+#Function used to transform the parameters
 def get_transformed_params(X, y, n_features_per_subset, max_epochs, random_state=777, augmentation_method='nn'):
     print(X.shape)
     print(y.shape)
