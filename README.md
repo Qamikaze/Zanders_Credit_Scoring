@@ -3,7 +3,7 @@ This repository contains all the code for the models and data preprocessing used
 
 Data Prepocessing: this section contains all the files used for prepocessing the data.
 
-Interpret: this section contains the file which is uses model-agnostic methods to interpret the data.
+Interpret: this section contains the file which uses model-agnostic methods to interpret the data.
 
 McNemar: this section contains the file which uses McNemar's tests to compare the output among models.
 
