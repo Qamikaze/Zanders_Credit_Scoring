@@ -1,4 +1,3 @@
-import pandas as pd
 #####
 # This file tunes an XGBoost classifier using random grid search 
 # and saves the model with the best hyperparameters.
