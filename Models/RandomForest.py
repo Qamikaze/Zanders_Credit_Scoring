@@ -1,3 +1,8 @@
+#####
+# This file tunes a random forest classifier using random grid search 
+# and saves the model with the best hyperparameters.
+#####
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -8,11 +13,10 @@ from hmeasure import h_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import PredefinedSplit
-import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+import pickle
 
 start_time = datetime.now()
-
 
 def partial_gini(y, p):
     # Select probabilites < 0.4
@@ -150,7 +154,9 @@ print('Data loading Duration: {}'.format(datetime.now() - start_time))
 # =============================================================================
 # Random Forest
 # =============================================================================
+
 start_time = datetime.now()
+
 #implementing random grid search, following https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
 n_estimators = [int(x) for x in np.arange(400, 650, 50)]
 max_features = ['sqrt']
@@ -180,30 +186,9 @@ pred_values = best_random.predict(X_test)
 prob_values = best_random.predict_proba(X_test)[:, 1]
 get_performance(y_test, pred_values, prob_values)
 
-p = pd.DataFrame()
-p['pred_rf']=pred_values
-p.to_csv('pred_rf.csv', index=False)
 print('Duration: {}'.format(datetime.now() - start_time))
-
-import pickle
 
 # Save model to file
 pkl_filename = "TUNED_rf.pkl"
-# with open(pkl_filename, 'wb') as file:
-#     pickle.dump(best_random, file)
-
-# Load model from file
-with open(pkl_filename, 'rb') as file:
-    pickle_model = pickle.load(file)
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
+with open(pkl_filename, 'wb') as file:
+    pickle.dump(best_random, file)
