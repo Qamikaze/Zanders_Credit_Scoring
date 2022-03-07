@@ -1,3 +1,8 @@
+#####
+# This code performs the AugBoostRF algorithm. It is tweeked from the original AugBoostNN function, see https://github.com/augboost-anon/augboost.
+#####
+
+# Import packages
 from sklearn.ensemble.gradient_boosting import BaseGradientBoosting, GradientBoostingClassifier, \
     GradientBoostingRegressor
 from sklearn.preprocessing.data import QuantileTransformer
@@ -333,7 +338,6 @@ class AugBoostBase(BaseGradientBoosting):
                     break
 
             # We also provide an early stopping based on the score from
-            # validation set (X_val, y_val), if n_iter_no_change is set
             if self.n_iter_no_change is not None:
                 # By calling next(y_val_pred_iter), we get the predictions
                 # for X_val after the addition of the current stage
