@@ -184,19 +184,13 @@ print('Data loading Duration: {}'.format(datetime.now() - start_time))
 # =============================================================================
 start_time = datetime.now()
 
-# Define a vector of weights to deal with the imbalanced data
-weight = y_train * len(y_test) / sum(y_test) / 2
-weight = weight.values
-weight[np.where(weight == 0)[0]] = 1
-
 #implementing random grid search, following https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74
 n_estimators = [300,350,400,450,500,550,600]
 max_features = ['sqrt']
 max_depth = [2,3,4,5,6]
-max_depth.append(None)
 learning_rate = [0.01, 0.03,0.1,0.3]
-gamma = [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.75]
-scale_pos_weight = [1,182.6*0.25,182.6*0.5,182.6*0.75,182.6]
+gamma = [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+scale_pos_weight = [1,182.6]
 random_grid = {'n_estimators': n_estimators, #deze
                 'max_depth': max_depth, #deze
                 'scale_pos_weight': scale_pos_weight,
