@@ -1,3 +1,7 @@
+#####
+# This code provides the output of the LightGBM algorithm.
+#####
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -53,8 +57,8 @@ def get_performance(y, y_f, p):
 # =============================================================================
 
 def get_data(small):
-    train = pd.read_csv('train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
-    test = pd.read_csv('test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
+    train = pd.read_csv('train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"') #load data
+    test = pd.read_csv('test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"') #load data
     
     if small == True:
         n = 1000
@@ -185,6 +189,3 @@ pkl_filename = "LGB.pkl"
 with open(pkl_filename, 'wb') as file:
     pickle.dump(model, file)
 
-# # Load model from file
-# with open(pkl_filename, 'rb') as file:
-#     model = pickle.load(file)
