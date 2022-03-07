@@ -1,3 +1,7 @@
+#####
+# This file imputes missing values by using a KNN-estimator.
+#####
+
 import pandas as pd
 from math import log
 from matplotlib import pyplot
@@ -69,17 +73,16 @@ def imputer(var):
     for i in data_set_train.columns:
         X_train[i]=train_data[i].values
     
-
     # Transform testing data
     test_data = imputer.transform(data_set_test)
     test_data = pd.DataFrame(data=test_data, columns=data_set_test.columns)
     for i in data_set_test.columns:
         X_test[i]=test_data[i].values
+        
 for var in names_var:
     imputer(var)
 imputer('stock')    
 
-    
 # Create train set
 X_train['y'] = y_test
 X_train.to_csv("train_data.csv.gz", index=False, compression="gzip")
