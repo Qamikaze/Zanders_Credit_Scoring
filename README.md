@@ -9,14 +9,17 @@ This repository contains all the code for the models and data preprocessing used
  This file is used to perform the McNemar's test to compare the performance of different classification models.
 
 - **Models**: this section contains all the used models.
-
-  - **XGBoost-RF**: this section contains the files for the new XGBoost-RF model.
-    - **AugmentationUtils.py**: This code augments the features for the XGBoost-RF algorithm using a Random Forest.
+  - **AugBoost_RF**: this section contains the files for the AugBoost-RF model.
+    - **AugBoostRandomForest.py**: This code performs the AugBoostRF algorithm. It is tweeked from the original AugBoostNN function, see https://github.com/augboost-anon/augboost.
+    - **AugmentationUtils.py**: This code augments the features for the AugBoostRF. Therfore, it is imported by AugBoostRandomForest.py.  It is an adjusted version of the AugmentationUtils on https://github.com/augboost-anon/augboost/blob/master/AugmentationUtils.py.
+    - **Run_augboost.py**: This code provides output for the AugBoost-RF model. It imports the function AugBoostClassifier from AugBoostRandomForest.py.
+  - **XGBoost_RF**: this section contains the files for the new XGBoost-RF model.
+    - **AugmentationUtils.py**: This code augments the features for the XGBoost-RF algorithm using a Random Forest.  It is an adjusted version of the AugmentationUtils on https://github.com/augboost-anon/augboost/blob/master/AugmentationUtils.py.
     - **RUN_XGBOOST_LAST.py**: The code used to run the XGBoost-RF algorithm using the XGBOOST_LAST.py code and get the performance measures of the model.
     - **XGBOOST_LAST.py**: This code performs the XGBoost-RF algorithm. It has as a basis the original AugBoostNN function, see https://github.com/augboost-anon/augboost and is adjusted accordingly.
-  - **GBDT.py**
-  - **LightGBM.py**
+  - **GBDT.py**: This code provides output for the GBDT algorithm.
+  - **LightGBM.py**: This code provides the output of the LightGBM algorithm.
   - **LogisticRegression.py**: This code is used to perform the Weight of Evidence on the data and subsequently perform the logistic regression and get its output.
-  - **RandomForest**
-  - **XGBoost**
+  - **RandomForest**: This file tunes a random forest classifier using random grid search and saves the model with the best hyperparameters.
+  - **XGBoost**: This file tunes an XGBoost classifier using random grid search and saves the model with the best hyperparameters.
  
