@@ -47,7 +47,7 @@ def get_transformed_params(X, y, n_features_per_subset, max_epochs, random_state
                     raise ValueError("`augmentation_method` must be `pca`, 'rp','rf' or `nn`, but was %s" % augmentation_method)
     return transforming_params
 
-
+# Function used to transform the X matrix of the problem at hand
 def get_transformed_matrix(X, transforming_params, augmentation_method):
     transformed_matrix = np.zeros(X.shape, dtype=np.float32)
     for tup in transforming_params:
