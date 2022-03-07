@@ -1,3 +1,7 @@
+#####
+# This file performs a variable selection by removing highly correlated features.
+#####
+
 import pandas as pd
 from datetime import datetime
 
@@ -12,10 +16,9 @@ train['industry_code'] = pd.factorize(train['industry_code'])[0]
 train['size_class'] = pd.factorize(train['size_class'])[0]
 train['status_year'] = pd.factorize(train['status_year'])[0]
 
-
 start_time = datetime.now()
 
-# Use correlations to reduce features
+# Use correlations to reduce the bumber of features
 l = train.columns.values.tolist()
 for i in train.columns:
     if i in l:
