@@ -57,8 +57,8 @@ def get_performance(y, y_f, p):
 # =============================================================================
 
 def get_data(small):
-    train = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')#load data
-    test = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')#load data
+    train = pd.read_csv('...train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')#Load in the training data
+    test = pd.read_csv('...test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')#Load in the test data
     
     if small == True:
         n = 10000
