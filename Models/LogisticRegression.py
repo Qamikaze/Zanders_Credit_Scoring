@@ -1,5 +1,5 @@
 #####
-# This file is used to perform the Weight of Evidence on the data and subsequently perform the logistic regression and get its output.
+# This code is used to perform the Weight of Evidence on the data and subsequently perform the logistic regression and get its output.
 #####
 
 import pandas as pd
