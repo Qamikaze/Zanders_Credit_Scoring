@@ -1,3 +1,7 @@
+#####
+# This code provides output for the GBDT algorithm
+#####
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -17,7 +21,7 @@ start_time = datetime.now()
 # Not used here, but can be used for other models to get the same split
 def validation_splitter():
     # Load raw data
-    train = pd.read_csv('train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
+    train = pd.read_csv('train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"') #load data
     
     # Factorize data
     train['country_code'] = pd.factorize(train['country_code'])[0]
@@ -73,8 +77,8 @@ def get_performance(y, y_f, p):
 # =============================================================================
 
 def get_data(small):
-    train = pd.read_csv('train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
-    test = pd.read_csv('test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
+    train = pd.read_csv('train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"') #load data
+    test = pd.read_csv('test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"') #load data
     
     if small == True:
         n = 1000
