@@ -1,5 +1,6 @@
 #####
-# This code augments the features for the XGBoost-RF. Therfore, it is imported by XGBOOST_LAST.py
+# This code augments the features for the XGBoost-RF. Therfore, it is imported by XGBOOST_LAST.py.
+# It is an adjusted version of the AugmentationUtils on https://github.com/augboost-anon/augboost/blob/master/AugmentationUtils.py.
 ####
 from sklearn.utils import gen_batches, check_random_state
 
