@@ -160,7 +160,7 @@ X_test = X_test.values
 from XGBOOST_LAST import XGBModelClassifier as XGB
 model = XGB(n_estimators=1, number_of_training_rounds = 500, learning_rate=0.1, scale_pos_weight=210,\
     n_features_per_subset=3, trees_between_feature_update=10,\
-    augmentation_method='rf', save_mid_experiment_accuracy_results=False,)#loss='exponential')
+    augmentation_method='rf', save_mid_experiment_accuracy_results=False,)
 
 model.fit(X_train, y_train)
 # Get test performance
