@@ -1,5 +1,5 @@
 #####
-# The code used to run the XGBoost-RF algorithm using the XGBOOST_LAST.py code.
+# The code used to run the XGBoost-RF algorithm using the XGBOOST_LAST.py code and get the performance measures of the model.
 #####
 
 import pandas as pd
