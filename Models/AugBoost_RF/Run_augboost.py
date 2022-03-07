@@ -1,5 +1,5 @@
 #####
-# This code provides output for the AugBoost-RF model. It imports the function AugBoostClassifier from AugBoostNN.py
+# This code provides output for the AugBoost-RF model. It imports the function AugBoostClassifier from AugBoostRandomForest.py
 #####
 
 import pandas as pd
