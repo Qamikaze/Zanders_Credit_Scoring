@@ -12,5 +12,6 @@ Models: this section contains all the used models.
 
 XGBoost-RF: The code for the new XGBoost-RF model.
 - AugmentationUtils.py: This code augments the features for the XGBoost-RF algorithm using a Random Forest.
-- RUN_XGBOOST_LAST.py:
+- RUN_XGBOOST_LAST.py: The code used to run the XGBoost-RF algorithm using the XGBOOST_LAST.py code and get the performance measures of the model.
+- XGBOOST_LAST.py:
  
