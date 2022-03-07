@@ -1,10 +1,16 @@
 import pandas as pd
+#####
+# This file tunes an XGBoost classifier using random grid search 
+# and saves the model with the best hyperparameters.
+#####
+
+import pandas as pd
 import numpy as np
 from datetime import datetime
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import brier_score_loss
-#from hmeasure import h_score
+from hmeasure import h_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import PredefinedSplit
@@ -66,7 +72,7 @@ def get_performance(y, y_f, p):
     print('PG is ', partial_gini(y, p))
     print('BS is ', brier_score_loss(y, p))
     print('AUC is ', roc_auc_score(y, p))
-    #print('H-measure is ', h_score(y.values, p))
+    print('H-measure is ', h_score(y.values, p))
     print(confusion_matrix(y, y_f))
 
 
@@ -178,6 +184,7 @@ print('Data loading Duration: {}'.format(datetime.now() - start_time))
 # =============================================================================
 start_time = datetime.now()
 
+# Define a vector of weights to deal with the imbalanced data
 weight = y_train * len(y_test) / sum(y_test) / 2
 weight = weight.values
 weight[np.where(weight == 0)[0]] = 1
@@ -187,7 +194,6 @@ n_estimators = [300,350,400,450,500,550,600]
 max_features = ['sqrt']
 max_depth = [2,3,4,5,6]
 max_depth.append(None)
-# min_samples_leaf = [int(x) for x in np.arange(2, 14, 2)]
 learning_rate = [0.01, 0.03,0.1,0.3]
 gamma = [0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.75]
 scale_pos_weight = [1,182.6*0.25,182.6*0.5,182.6*0.75,182.6]
@@ -199,7 +205,7 @@ random_grid = {'n_estimators': n_estimators, #deze
 }
 print(random_grid)
 
-# # Run RFs
+# Run XGBoost models
 model = xgb.XGBClassifier(random_state = 1)
 xgb_random = RandomizedSearchCV(estimator = model, param_distributions = random_grid,
                                  n_iter = 10, cv = PredefinedSplit( validation_index ),
@@ -209,28 +215,13 @@ xgb_random.fit(X_train, y_train)
 best_random = xgb_random.best_estimator_
 print(best_random)
 
-#model = xgb.XGBClassifier(n_estimators=500, max_depth=, learning_rate=, gamma=)
-#model.fit(X_train, y_train, sample_weight=weight, verbose=True)
-
 # Get test performance
 pred_values = best_random.predict(X_test)
 prob_values = best_random.predict_proba(X_test)[:, 1]
 get_performance(y_test, pred_values, prob_values)
 
-print('Modeling Duration: {}'.format(datetime.now() - start_time))
-
-importance = best_random.feature_importances_
-ordered_importances = pd.DataFrame()
-ordered_importances['feature'] = X_train.columns
-ordered_importances['importance'] = importance
-ordered_importances = ordered_importances.sort_values(ascending=False, by=['importance'])
-
-n = 10
-some = ordered_importances.head(n)
-print(some)
 # save model
 best_random.save_model("Tuned_xgboost.json")
 
-# load model
-# model_xgb_2 = xgb.XGBClassifier()
-# model_xgb_2.load_model("xgboost.json")
+print('Modeling Duration: {}'.format(datetime.now() - start_time))
+
