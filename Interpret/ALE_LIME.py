@@ -1,15 +1,18 @@
+#####
+# This file implements ALE for global model-agnostic interpretation 
+# and LIME for local model-agnostic explenation.
+#####
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import brier_score_loss
 from hmeasure import h_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.metrics import r2_score
+from lime import lime_tabular
 import pickle
 from PyALE import ale
 
@@ -52,6 +55,7 @@ def get_performance(y, y_f, p):
 # Data splitting
 # =============================================================================
 
+# This function returns the train and test data with factorized catagorical variables
 def get_data(small):
     train = pd.read_csv('train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
     test = pd.read_csv('test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
@@ -231,24 +235,13 @@ pkl_filename = "TUNED_rf.pkl"
 with open(pkl_filename, 'rb') as file:
     model = pickle.load(file)
     
-# # check performance with DT
-# p_values = model.predict_proba(X_train)[:, 1]
-# reg = DecisionTreeRegressor().fit(X_train, p_values)
-# y_pred = reg.predict(np.array(X_train))
-# r = r2_score(p_values, y_pred)
-# print(r)
-# reg.get_depth()
-
-# # get importance
-# importance = reg.feature_importances_
-# for i,v in enumerate(importance):
-# 	print('Feature: %0d, Score: %.5f' % (i,v))
 importance = model.feature_importances_   
 ordered_importances = pd.DataFrame()
 ordered_importances['feature'] = X_train.columns
 ordered_importances['importance'] = importance 
 ordered_importances = ordered_importances.sort_values(ascending=False, by=['importance'])
 
+# Select the most important drivers for further analysis
 n = 10
 some = ordered_importances.head(n)
 sum(ordered_importances['importance'].head(n))
@@ -262,26 +255,9 @@ plt.xlabel('feature')
 plt.ylabel('importance')
 plt.show()
 
-# for i in feature:
-#     if i!= 'country_code':
-#         ale_eff = ale(X=X_train, model=model, feature=[i], grid_size=50, 
-#             include_CI=False,plot=False)
-#         a = ale_eff. index
-#         eff = ale_eff['eff']
-#         # plt.figure(figsize=(16, 8))
-#         # i = 'pl_for_period_net_income_0'
-#         plt.plot(a, eff)
-#         plt.xlabel(i)
-#         plt.ylabel('Effect on the predicted probability of default')
-
-#         i = i+'.png'
-#         plt.savefig(i)
-#         plt.show()  
-#         plt.close()
-
-# 10,50,200,1000
+# Plot the ALE of numeric features
 i = 'solvency_0'       
-ale_eff = ale(X=X_train, model=model, feature=[i], grid_size=10000, 
+ale_eff = ale(X=X_train, model=model, feature=[i], grid_size=100, 
     include_CI=False,  plot=True)
 a = ale_eff. index
 eff = ale_eff['eff']
@@ -293,10 +269,9 @@ plt.savefig(i)
 plt.show()  
 plt.close()        
 
-
+# plot the ALE of the "country" variable
 feat_eff2 = ale(X=X_train, model=model, feature=['country_code'], grid_size=50,
                include_CI=False)
-
 feat_eff2['eff']
 X_train['country_code']
 X_train2.country_code.unique()
@@ -315,15 +290,8 @@ plt.ylabel('Effect on the predicted probability of default')
 plt.show()
 plt.savefig('country_code.png')
 
-from lime import lime_tabular
-
+# Create LIME plot for the observation of interest
 prob_values = model.predict_proba(X_test)[:, 1]
-
-df = pd.DataFrame()
-df['p']=prob_values
-df['y']=y_test
-df.loc[df['y'] == 1]
-
 
 explainer = lime_tabular.LimeTabularExplainer(
     training_data=np.array(X_train),
@@ -337,5 +305,5 @@ with plt.style.context("ggplot"):
 explanation.save_to_file('lime_report.html')
 prob_values[527]
 
-
+print('Duration: {}'.format(datetime.now() - start_time))
 
