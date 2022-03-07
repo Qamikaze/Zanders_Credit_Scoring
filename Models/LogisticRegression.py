@@ -1,3 +1,7 @@
+#####
+# This file is used to perform the Weight of Evidence on the data and subsequently perform the logistic regression and get its output.
+#####
+
 import pandas as pd
 from math import log
 from matplotlib import pyplot
