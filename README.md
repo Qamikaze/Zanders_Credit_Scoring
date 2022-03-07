@@ -11,5 +11,6 @@ McNemar: this section contains the file which uses McNemar's tests to compare th
 Models: this section contains all the used models.
 
 XGBoost-RF: The code for the new XGBoost-RF model.
-- AugmentationUtils: This code augments the features for the XGBoost-RF algorithm using a Random Forest.
+- AugmentationUtils.py: This code augments the features for the XGBoost-RF algorithm using a Random Forest.
+- RUN_XGBOOST_LAST.py:
  
