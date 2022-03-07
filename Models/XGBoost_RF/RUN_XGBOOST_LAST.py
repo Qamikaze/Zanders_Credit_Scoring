@@ -1,3 +1,7 @@
+#####
+# The code used to run the XGBoost-RF algorithm using the XGBOOST_LAST.py code.
+#####
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -7,9 +11,6 @@ from sklearn.metrics import brier_score_loss
 from hmeasure import h_score
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
-#from svencode import XGBClassifier as XGB
-#import matplotlib.pyplot as plt
-#import shap
 
 import xgboost as xgb
 
@@ -53,8 +54,8 @@ def get_performance(y, y_f, p):
 # =============================================================================
 
 def get_data(small):
-    train = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
-    test = pd.read_csv('C:/Users/svenh/OneDrive/Documents/Master/Seminar Case Studies/test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"')
+    train = pd.read_csv('...train_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"') #Load in the training data
+    test = pd.read_csv('...test_data.csv.gz', compression='gzip',  header=0, sep=',', quotechar='"') #Load in the test data
     
     if small == True:
         n = 10000
@@ -152,25 +153,17 @@ start_time = datetime.now()
 
 num_rows, num_cols = X_train.shape
 
-#weight = None
-
-#from svencodeFit_stage import AugBoostClassifier as XGB
-
 # zet data om naar values ipv data frame
 X_train = X_train.values
 X_test = X_test.values
-#%%
+
 from XGBOOST_LAST import XGBModelClassifier as XGB
 model = XGB(n_estimators=1, number_of_training_rounds = 500, learning_rate=0.1, scale_pos_weight=210,\
     n_features_per_subset=3, trees_between_feature_update=10,\
     augmentation_method='rf', save_mid_experiment_accuracy_results=False,)#loss='exponential')
 
 model.fit(X_train, y_train)
-
-#X_test = xgb.DMatrix(X_test.values) # dit werkt niet 
 # Get test performance
-
-# = xgb.DMatrix(X_test.values)
 pred_values = model.predict(X_test)
 prob_values = model.predict_proba(X_test)[:, 1]
 get_performance(y_test, pred_values, prob_values)
