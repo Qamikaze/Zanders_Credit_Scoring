@@ -23,6 +23,6 @@ This repository contains all the code for the models and data preprocessing used
   - **GBDT.py**: This code provides output for the GBDT algorithm.
   - **LightGBM.py**: This code provides the output of the LightGBM algorithm.
   - **LogisticRegression.py**: This code is used to perform the Weight of Evidence on the data and subsequently perform the logistic regression and get its output.
-  - **RandomForest**: This file tunes a random forest classifier using random grid search and saves the model with the best hyperparameters.
-  - **XGBoost**: This file tunes an XGBoost classifier using random grid search and saves the model with the best hyperparameters.
+  - **RandomForest.py**: This file tunes a random forest classifier using random grid search and saves the model with the best hyperparameters.
+  - **XGBoost.py**: This file tunes an XGBoost classifier using random grid search and saves the model with the best hyperparameters.
  
